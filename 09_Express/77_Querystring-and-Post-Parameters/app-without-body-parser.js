@@ -1,17 +1,14 @@
 var express = require('express');
-
-// NOTE: body-parser is no longer required
-//  (runn app-without-body-parser.js)
-var bodyParser = require('body-parser');
 var app = express();
-
+// var bodyParser = require('body-parser');
 var port = process.env.PORT || 3000;
 
-// create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
+// NOTE: body-parser is no longer required
+// var urlencodedParser = bodyParser.urlencoded({ extended: false });
+// var jsonParser = bodyParser.json();
 
-// create application/json parser
-var jsonParser = bodyParser.json();
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.use('/assets', express.static(__dirname + '/public'));
 
@@ -31,13 +28,15 @@ app.get('/person/:id', function(req, res) {
 });
 
 // Pass urlencodedParser as a middleware callback to .post method
-app.post('/person', urlencodedParser, function(req, res) {
+// app.post('/person', urlencodedParser, function(req, res) {
+  app.post('/person', function(req, res) {
 	res.send('Thank you!');
 	console.log(req.body.firstname);
 	console.log(req.body.lastname);
 });
 
-app.post('/personjson', jsonParser, function(req, res) {
+// app.post('/personjson', jsonParser, function(req, res) {
+app.post('/personjson', function(req, res) {
 	res.send('Thank you for the JSON data!');
 	console.log(req.body.firstname);
 	console.log(req.body.lastname);
